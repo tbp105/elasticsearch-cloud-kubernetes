@@ -15,13 +15,18 @@
  */
 package io.fabric8.elasticsearch.cloud.kubernetes;
 
-import io.fabric8.kubernetes.api.model.Endpoints;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kubernetes.client.ApiClient;
+import io.kubernetes.client.ApiException;
+import io.kubernetes.client.Configuration;
+import io.kubernetes.client.apis.CoreV1Api;
+import io.kubernetes.client.models.V1Endpoints;
+import io.kubernetes.client.models.V1EndpointsList;
+import io.kubernetes.client.util.Config;
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.settings.Settings;
 
 import java.io.Closeable;
+import java.io.IOException;
 
 public class KubernetesAPIServiceImpl extends AbstractComponent implements KubernetesAPIService, Closeable {
 
@@ -29,12 +34,18 @@ public class KubernetesAPIServiceImpl extends AbstractComponent implements Kuber
   private final String serviceName;
 
   @Override
-  public Endpoints endpoints() {
+  public V1Endpoints endpoints() {
     logger.debug("get endpoints for service {}, namespace {}", serviceName, namespace);
-    return client().endpoints().inNamespace(namespace).withName(serviceName).get();
+
+    try {
+      return client().readNamespacedEndpoints(serviceName,namespace, null, null, null);
+    } catch (ApiException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
-  private KubernetesClient client;
+  private CoreV1Api api;
 
   public KubernetesAPIServiceImpl(Settings settings) {
     super(settings);
@@ -42,18 +53,24 @@ public class KubernetesAPIServiceImpl extends AbstractComponent implements Kuber
     this.serviceName = SERVICE_NAME_SETTING.get(settings);
   }
 
-  public synchronized KubernetesClient client() {
-    if (client == null) {
-      client = new DefaultKubernetesClient();
+  public synchronized CoreV1Api client() {
+    if (api == null) {
+      try {
+        ApiClient client = Config.defaultClient();
+        Configuration.setDefaultApiClient(client);
+
+        api = new CoreV1Api();
+
+
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
-    return client;
+    return api;
   }
 
   @Override
   public void close() {
-    if (client != null) {
-      client.close();
-    }
   }
 
 }

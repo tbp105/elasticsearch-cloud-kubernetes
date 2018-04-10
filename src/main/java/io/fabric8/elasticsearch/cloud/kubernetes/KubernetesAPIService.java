@@ -15,7 +15,7 @@
  */
 package io.fabric8.elasticsearch.cloud.kubernetes;
 
-import io.fabric8.kubernetes.api.model.Endpoints;
+import io.kubernetes.client.models.V1Endpoints;
 import org.elasticsearch.common.settings.Setting;
 import org.elasticsearch.common.settings.Setting.Property;
 import org.elasticsearch.common.unit.TimeValue;
@@ -35,6 +35,6 @@ public interface KubernetesAPIService {
    *
    * @return a collection of IP addresses for the service endpoints
    */
-  Endpoints endpoints();
+  V1Endpoints endpoints();
 
 }

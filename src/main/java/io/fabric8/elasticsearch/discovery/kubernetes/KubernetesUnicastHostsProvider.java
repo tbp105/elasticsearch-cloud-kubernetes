@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2015 Red Hat, Inc.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
 package io.fabric8.elasticsearch.discovery.kubernetes;
 
 import io.fabric8.elasticsearch.cloud.kubernetes.KubernetesAPIService;
-import io.fabric8.kubernetes.api.model.Endpoints;
+import io.kubernetes.client.models.V1Endpoints;
 import org.elasticsearch.SpecialPermission;
 import org.elasticsearch.Version;
 import org.elasticsearch.cluster.node.DiscoveryNode;
@@ -115,7 +115,7 @@ public class KubernetesUnicastHostsProvider extends AbstractComponent implements
     final String ipAddress = tmpIPAddress;
 
     try {
-      Endpoints endpoints = kubernetesAPIService.endpoints();
+      V1Endpoints endpoints = kubernetesAPIService.endpoints();
       if (endpoints == null || endpoints.getSubsets() == null || endpoints.getSubsets().isEmpty()) {
         logger.warn("no endpoints found for service [{}], namespace [{}].", this.serviceName, this.namespace);
         return cachedDiscoNodes;

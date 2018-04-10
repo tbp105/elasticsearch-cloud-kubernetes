@@ -55,7 +55,7 @@
   <properties>
     <elasticsearch.plugin.name>discovery-kubernetes</elasticsearch.plugin.name>
     <elasticsearch.version>6.2.3</elasticsearch.version>
-    <kubernetes-client.version>3.0.3</kubernetes-client.version>
+    <kubernetes-client.version>1.0.0-beta3</kubernetes-client.version>
     <tests.shuffle>true</tests.shuffle>
     <tests.output>onerror</tests.output>
     <tests.client.ratio />
@@ -74,8 +74,8 @@
 
     <!-- Fabric8 Kubernetes APIs -->
     <dependency>
-      <groupId>io.fabric8</groupId>
-      <artifactId>kubernetes-client</artifactId>
+      <groupId>io.kubernetes</groupId>
+      <artifactId>client-java</artifactId>
       <version>${kubernetes-client.version}</version>
     </dependency>
 
