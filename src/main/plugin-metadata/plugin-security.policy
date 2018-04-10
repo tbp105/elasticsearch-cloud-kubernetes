@@ -17,7 +17,6 @@
 grant {
   // Allow connecting to the internet anywhere
   permission java.net.SocketPermission "*", "connect,resolve";
-
   permission java.lang.RuntimePermission "accessDeclaredMembers";
   permission java.lang.RuntimePermission "setFactory";
   permission java.lang.RuntimePermission "accessClassInPackage.sun.security.ssl";
